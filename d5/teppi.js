@@ -21,14 +21,20 @@ window.onload = function init()
     // First, initialize the corners of our gasket with three points.
 
     var vertices = [
-        vec2( 1, -1 ),
+        vec2( -1, 1 ),
         vec2(  1,  1 ),
-        vec2(  -1, -1 ),
-        vec2(1,-1)
+        vec2(  1, -1 ),
+        vec2( -1, -1 ),
+        vec2(  -1, 1 ),
+        vec2(1,-1),
+       
+       
+    
+        
     ];
 
     divideTriangle( vertices[0], vertices[1], vertices[2],vertices[3],
-                    NumTimesToSubdivide);
+                   vertices[4],vertices[5], NumTimesToSubdivide);
 
     //
     //  Configure WebGL
@@ -56,18 +62,18 @@ window.onload = function init()
     render();
 };
 
-function triangle( a, b, c,d)
+function triangle( a, b, c,d,e,f)
 {
-    points.push( a, b, c ,d);
+    points.push( a, b, c ,d,e,f);
 }
 
-function divideTriangle( a, b, c, d, count )
+function divideTriangle( a, b, c, d,e,f, count )
 {
 
     // check for end of recursion
 
     if ( count === 0 ) {
-        triangle( a, b, c ,d);
+        triangle( a, b, c ,d,e,f);
     }
     else {
 
@@ -75,29 +81,68 @@ function divideTriangle( a, b, c, d, count )
 
         var ab1= mix( a, b, 0.33 );
         var ab2= mix( a, b, 0.66);
-        var ac1 = mix( a, c, 0.33 );
-        var ac2 = mix( a, c, 0.66 );
+
+        var bc1 = mix( b, c, 0.33 );
+        var bc2 = mix( b, c, 0.66 );
+
+        var ad1 = mix( a, d, 0.33 );
+        var ad2 = mix( a, d, 0.66 );
+
         var cd1= mix( c, d, 0.33 );
         var cd2= mix( c, d, 0.66);
-        var bd1 = mix( b, d, 0.33 );
-        var bd2 = mix( b, d, 0.66 );
-        var a1 = mix(ac1,bd1,0.33);
-        var b1 = mix(ac1,bd1,0.66);
-        var c1 = mix(ac2,bd2,0.33);
-        var d1 = mix(ac2,bd2,0.66);
+
+        
+
+        var a1 = mix(ad1,bc1,0.33);
+        var b1 = mix(ad1,bc1,0.66);
+        var d1 = mix(ad2,bc2,0.33);
+        var c1 = mix(ad2,bc2,0.66);
         
 
         --count;
 
+         // three new triangles
+       divideTriangle(a,ab1,a1,ad1,a,a1,count);
+
+       divideTriangle(ab1,ab2,b1,a1,ab1,b1,count);
+
+      divideTriangle(ab2,b,bc1,b1,ab2,bc1,count);
+
+   divideTriangle(b1,bc1,bc2,c1,b1,bc2,count);
+
+       divideTriangle(c1,bc2,c,cd1,c1,c,count);
+
+       divideTriangle(d1,c1,cd1,cd2,d1,cd1,count);
+       
+       divideTriangle(ad2,d1,cd2,d,ad2,cd2,count);
+
+       divideTriangle(ad1,a1,d1,ad2,ad1,d1,count);
+
         // three new triangles
-        divideTriangle(a,ac1,ab1,a1,count);
-        divideTriangle(ac1,ac2,a1,c1,count);
-        divideTriangle(c,ac2,cd1.c1,count);
-        divideTriangle(cd1,cd2,c1,d1,count);
-        divideTriangle(d,cd2,bd2,d1,count);
-        divideTriangle(bd2,bd1,d1,c1,count);
-        divideTriangle(b,ab2,b1,bd1,count);
-        divideTriangle(ab1,a1,b1,ab2,count);
+      //divideTriangle(a,ab1,a1,ad1,a,count);
+
+       /* divideTriangle(ab1,ab2,b1,a1,count);
+
+       divideTriangle(ab2,b,bc1,b1,count);
+
+     divideTriangle(b1,bc1,bc2,c1,count);
+
+        divideTriangle(c1,bc2,c,cd2,count);
+
+        divideTriangle(d1,c1,cd1,cd2,count);
+        
+        divideTriangle(ad2,d1,cd2,d,count);
+
+        divideTriangle(ad1,a1,d1,ad2,count);
+       
+
+        
+*/
+        
+
+        
+
+        
 
     }
 }
