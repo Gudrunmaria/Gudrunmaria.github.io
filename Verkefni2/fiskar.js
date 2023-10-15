@@ -168,7 +168,7 @@ window.onload = function init()
     render();
 }
 
-function fiskur(mv, x,y,z,litur){
+function fiskur(mv,x,y,z,litur,lituru){
     gl.uniform4fv(colorLoc,litur);
 
     rotTail += incTail;
@@ -197,8 +197,7 @@ function fiskur(mv, x,y,z,litur){
     gl.uniformMatrix4fv(mvLoc, false, flatten(mv));
     gl.drawArrays( gl.TRIANGLES, NumBody, NumTail );
 
-    gl.uniform4fv(colorLoc,vec4(0.0,0.2,0.3,1.0));
-    
+    gl.uniform4fv(colorLoc,lituru);
     //Teikna ugga1
     mv =mult(mv1, translate(0.0,0.0,0.0));
     mv =mult(mv, rotateY(rotFinn));
@@ -227,7 +226,7 @@ function render()
     for(let i =0; i <10;i++) {
         const startIndex =i*3;
        
-        fiskur(mv,upphaf[startIndex],upphaf[1+startIndex],upphaf[2+startIndex],litir[i]);
+        fiskur(mv,upphaf[startIndex],upphaf[1+startIndex],upphaf[2+startIndex],litir[i],litir[1+i]);
         
     }
     
